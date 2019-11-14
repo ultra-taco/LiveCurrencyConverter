@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LiveCurrencyConverter</string>
+    <string name="action_clear_database">Clear Database</string>
+</resources>
