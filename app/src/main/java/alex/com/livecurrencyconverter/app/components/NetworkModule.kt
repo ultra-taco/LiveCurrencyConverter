@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.components.api
+package alex.com.livecurrencyconverter.app.components
 
 import alex.com.livecurrencyconverter.other.Constants
 import com.facebook.stetho.okhttp3.StethoInterceptor
@@ -36,16 +36,6 @@ class NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
-    }
-
-    @Provides
-    internal fun provideAPI(retrofit: Retrofit): CurrencyAPI {
-        return retrofit.create(CurrencyAPI::class.java)
-    }
-
-    @Provides
-    internal fun provideAPIClient(currencyAPI: CurrencyAPI, client: OkHttpClient): APIClient {
-        return APIClient(client, currencyAPI)
     }
 
 }

@@ -1,10 +1,9 @@
-package alex.com.livecurrencyconverter.components.app
+package alex.com.livecurrencyconverter.app.components
 
-import alex.com.livecurrencyconverter.components.api.APIClient
-import alex.com.livecurrencyconverter.components.api.NetworkModule
 import android.app.Application
 import android.content.Context
 import dagger.Component
+import retrofit2.Retrofit
 
 /**
  * Created by Alex Doub on 11/13/2019.
@@ -13,9 +12,10 @@ import dagger.Component
 @AppScope
 @Component(modules = [AppModule::class, NetworkModule::class])
 interface AppComponent {
-    fun provideAPIClient(): APIClient
 
     fun provideContext(): Context
 
     fun provideApplication(): Application
+
+    fun provideRetrofit(): Retrofit
 }

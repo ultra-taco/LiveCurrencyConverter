@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.components.app
+package alex.com.livecurrencyconverter.app.components
 
 import android.app.Application
 import android.content.Context
