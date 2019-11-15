@@ -1,5 +1,6 @@
-package alex.com.livecurrencyconverter.app.components
+package alex.com.livecurrencyconverter.app.components.app
 
+import alex.com.livecurrencyconverter.app.components.network.NetworkModule
 import android.app.Application
 import android.content.Context
 import dagger.Component

@@ -1,13 +1,12 @@
 package alex.com.livecurrencyconverter.app
 
-import alex.com.livecurrencyconverter.activities.components.CurrencyConverterComponent
-import alex.com.livecurrencyconverter.activities.components.CurrencyConverterModule
-import alex.com.livecurrencyconverter.activities.components.DaggerCurrencyConverterComponent
-import alex.com.livecurrencyconverter.app.components.NetworkModule
-import alex.com.livecurrencyconverter.app.components.AppComponent
-import alex.com.livecurrencyconverter.app.components.AppModule
-import alex.com.livecurrencyconverter.app.components.DaggerAppComponent
-
+import alex.com.livecurrencyconverter.app.components.app.AppComponent
+import alex.com.livecurrencyconverter.app.components.app.AppModule
+import alex.com.livecurrencyconverter.app.components.app.DaggerAppComponent
+import alex.com.livecurrencyconverter.app.components.network.NetworkModule
+import alex.com.livecurrencyconverter.currency.component.CurrencyConverterComponent
+import alex.com.livecurrencyconverter.currency.component.CurrencyConverterModule
+import alex.com.livecurrencyconverter.currency.component.DaggerCurrencyConverterComponent
 import android.app.Application
 import com.facebook.stetho.Stetho
 

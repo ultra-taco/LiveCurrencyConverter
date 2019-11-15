@@ -6,7 +6,7 @@ package alex.com.livecurrencyconverter.other
 
 class Constants {
     companion object {
-        val BASE_URL = "https://apilayer.net/api/"
+        val BASE_URL = "http://apilayer.net/api/"
         val API_KEY = "60ba8620db26e7afeafbcf3399eb859d"
     }
 }

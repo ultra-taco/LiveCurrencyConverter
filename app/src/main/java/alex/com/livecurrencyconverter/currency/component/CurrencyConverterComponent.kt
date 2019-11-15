@@ -1,7 +1,7 @@
-package alex.com.livecurrencyconverter.activities.components
+package alex.com.livecurrencyconverter.currency.component
 
-import alex.com.livecurrencyconverter.activities.CurrencyConverterActivity
-import alex.com.livecurrencyconverter.app.components.AppComponent
+import alex.com.livecurrencyconverter.currency.activity.CurrencyConverterActivity
+import alex.com.livecurrencyconverter.app.components.app.AppComponent
 import dagger.Component
 
 /**

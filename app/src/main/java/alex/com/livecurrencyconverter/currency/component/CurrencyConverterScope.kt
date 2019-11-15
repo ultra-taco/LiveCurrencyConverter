@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.activities.components
+package alex.com.livecurrencyconverter.currency.component
 
 import javax.inject.Scope
 

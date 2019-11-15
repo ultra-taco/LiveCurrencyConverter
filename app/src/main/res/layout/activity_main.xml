@@ -3,7 +3,7 @@
     <data>
         <variable
             name="viewModel"
-            type="alex.com.livecurrencyconverter.activities.CurrencyConverterViewModel" />
+            type="alex.com.livecurrencyconverter.currency.activity.CurrencyConverterViewModel" />
 
     </data>
 
@@ -12,7 +12,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.CurrencyConverterActivity">
+        tools:context=".currency.activity.CurrencyConverterActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
