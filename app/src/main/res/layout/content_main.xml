@@ -43,7 +43,9 @@
             android:id="@+id/source_currency_selector"
             visible="@{!viewModel.isLoadingObservable()}"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +66,9 @@
             android:id="@+id/destination_currency_selector"
             visible="@{!viewModel.isLoadingObservable()}"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:padding="5dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/source_currency_selector" />
 
@@ -86,10 +90,12 @@
             visible="@{!viewModel.isLoadingObservable()}"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
             android:singleLine="true"
-            android:text="1.00"
+            android:text="@={viewModel.amountObservable}"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/destination_currency_selector" />
+            app:layout_constraintTop_toBottomOf="@id/destination_currency_selector"
+            tools:text="1.00" />
 
         <!-- Quotes List -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
