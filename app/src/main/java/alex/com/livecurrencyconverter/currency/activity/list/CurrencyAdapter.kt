@@ -1,29 +1,10 @@
 package alex.com.livecurrencyconverter.currency.activity.list
 
-import alex.com.livecurrencyconverter.currency.entity.CurrencyEntity
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import android.content.Context
+import android.widget.ArrayAdapter
 
-/**
- * Created by Alex Doub on 11/14/2019.
- */
-
-class CurrencyAdapter : RecyclerView.Adapter<CurrencyItemViewHolder>() {
-
-    private var items: List<CurrencyItemViewModel> = emptyList()
-
-    fun setData(entities: List<CurrencyEntity>) {
-        items = entities.map { CurrencyItemViewModel((it)) }
-        notifyDataSetChanged()
+class CurrencyAdapter(context: Context) : ArrayAdapter<String>(context, android.R.layout.simple_spinner_item) {
+    init {
+        setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
     }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyItemViewHolder {
-        return CurrencyItemViewHolder(parent)
-    }
-
-    override fun onBindViewHolder(holder: CurrencyItemViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
-
-    override fun getItemCount() = items.size
 }

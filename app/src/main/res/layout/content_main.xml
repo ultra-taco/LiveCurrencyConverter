@@ -1,5 +1,13 @@
 <layout>
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="alex.com.livecurrencyconverter.currency.activity.CurrencyConverterViewModel" />
+
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -9,35 +17,60 @@
         tools:context=".currency.activity.CurrencyConverterActivity"
         tools:showIn="@layout/activity_main">
 
-        <Spinner
-            android:id="@+id/currency_selector_spinner"
-            android:layout_width="90dp"
-            android:layout_height="40dp"
-            android:background="#F00"
+        <ProgressBar
+            visible="@{viewModel.isLoadingObservable()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <EditText
-            android:id="@+id/amount_et"
-            android:layout_width="90dp"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="1.00"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currency_selector_spinner" />
-
+        <!-- Source Currency -->
         <androidx.appcompat.widget.AppCompatTextView
+            visible="@{!viewModel.isLoadingObservable()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:background="#0F0"
             android:gravity="bottom"
-            android:text="Select a currency:"
+            android:text="Select a source currency:"
             android:textSize="18dp"
-            app:layout_constraintBottom_toBottomOf="@id/currency_selector_spinner"
-            app:layout_constraintEnd_toStartOf="@id/currency_selector_spinner" />
+            app:layout_constraintBottom_toBottomOf="@id/source_currency_selector"
+            app:layout_constraintEnd_toStartOf="@id/source_currency_selector"
+            app:layout_constraintTop_toTopOf="@id/source_currency_selector" />
 
+        <Spinner
+            android:id="@+id/source_currency_selector"
+            visible="@{!viewModel.isLoadingObservable()}"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Destination Currency -->
         <androidx.appcompat.widget.AppCompatTextView
+            visible="@{!viewModel.isLoadingObservable()}"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:gravity="bottom"
+            android:text="Select a destination currency:"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/destination_currency_selector"
+            app:layout_constraintEnd_toStartOf="@id/destination_currency_selector"
+            app:layout_constraintTop_toTopOf="@id/destination_currency_selector" />
+
+        <Spinner
+            android:id="@+id/destination_currency_selector"
+            visible="@{!viewModel.isLoadingObservable()}"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/source_currency_selector" />
+
+        <!-- Amount -->
+        <androidx.appcompat.widget.AppCompatTextView
+            visible="@{!viewModel.isLoadingObservable()}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -48,8 +81,20 @@
             app:layout_constraintEnd_toStartOf="@id/amount_et"
             app:layout_constraintTop_toTopOf="@id/amount_et" />
 
+        <EditText
+            android:id="@+id/amount_et"
+            visible="@{!viewModel.isLoadingObservable()}"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="1.00"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/destination_currency_selector" />
+
+        <!-- Quotes List -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
+            visible="@{!viewModel.isLoadingObservable()}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -59,6 +104,7 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
+                visible="@{!viewModel.isLoadingObservable()}"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 

@@ -1,12 +1,5 @@
 <layout>
 
-    <data>
-        <variable
-            name="viewModel"
-            type="alex.com.livecurrencyconverter.currency.activity.CurrencyConverterViewModel" />
-
-    </data>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -29,7 +22,7 @@
         </com.google.android.material.appbar.AppBarLayout>
 
         <include
-            android:id="@+id/content_main"
+            android:id="@+id/content"
             layout="@layout/content_main"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

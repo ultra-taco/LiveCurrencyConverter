@@ -1,6 +1,7 @@
 package alex.com.livecurrencyconverter.currency.api
 
-import alex.com.livecurrencyconverter.currency.api.response.CurrencyAPIResponse
+import alex.com.livecurrencyconverter.currency.api.response.CurrenciesAPIResponse
+import alex.com.livecurrencyconverter.currency.api.response.QuotesAPIResponse
 import io.reactivex.Observable
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -11,6 +12,9 @@ import retrofit2.http.Query
 
 interface CurrencyAPI {
 
+    @GET("list")
+    fun getCurrencies(@Query("access_key") apiKey: String): Observable<CurrenciesAPIResponse>
+
     @GET("live")
-    fun getLiveCurrencyList(@Query("access_key") apiKey: String): Observable<CurrencyAPIResponse>
+    fun getLiveQuotes(@Query("access_key") apiKey: String): Observable<QuotesAPIResponse>
 }

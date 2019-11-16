@@ -1,6 +1,7 @@
 package alex.com.livecurrencyconverter.currency.api
 
-import alex.com.livecurrencyconverter.currency.api.response.CurrencyAPIResponse
+import alex.com.livecurrencyconverter.currency.api.response.CurrenciesAPIResponse
+import alex.com.livecurrencyconverter.currency.api.response.QuotesAPIResponse
 import io.reactivex.Observable
 
 /**
@@ -9,7 +10,11 @@ import io.reactivex.Observable
 
 class CurrencyAPIClient(private val apiKey: String, private val currencyAPI: CurrencyAPI) {
 
-    fun getLiveCurrencyList(): Observable<CurrencyAPIResponse> {
-        return currencyAPI.getLiveCurrencyList(apiKey)
+    fun getCurrencies(): Observable<CurrenciesAPIResponse> {
+        return currencyAPI.getCurrencies(apiKey)
+    }
+
+    fun getQuotes(): Observable<QuotesAPIResponse> {
+        return currencyAPI.getLiveQuotes(apiKey)
     }
 }
