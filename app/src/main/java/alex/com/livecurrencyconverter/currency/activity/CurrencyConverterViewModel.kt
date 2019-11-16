@@ -80,7 +80,7 @@ class CurrencyConverterViewModel(private val currencyAPIClient: CurrencyAPIClien
                         else -> {
                             val currencies = response.currencies.map { it.key }.sorted()
                             currenciesObservable.postValue(currencies)
-                            showSnackbarEvent.postValue("Currencies loaded on ${response.timestamp}")
+                            showSnackbarEvent.postValue("Currencies loaded on ${response.timestamp}") //@@TODO: THIS IS NULL!!!
                             isLoadingObservable.postValue(false)
                         }
                     }
