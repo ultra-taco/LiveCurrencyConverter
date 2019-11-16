@@ -1,9 +1,9 @@
 package alex.com.livecurrencyconverter.app
 
-import alex.com.livecurrencyconverter.app.components.app.AppComponent
-import alex.com.livecurrencyconverter.app.components.app.AppModule
-import alex.com.livecurrencyconverter.app.components.app.DaggerAppComponent
-import alex.com.livecurrencyconverter.app.components.network.NetworkModule
+import alex.com.livecurrencyconverter.app.component.app.AppComponent
+import alex.com.livecurrencyconverter.app.component.app.AppModule
+import alex.com.livecurrencyconverter.app.component.app.DaggerAppComponent
+import alex.com.livecurrencyconverter.app.component.network.NetworkModule
 import alex.com.livecurrencyconverter.currency.component.CurrencyConverterComponent
 import alex.com.livecurrencyconverter.currency.component.CurrencyConverterModule
 import alex.com.livecurrencyconverter.currency.component.DaggerCurrencyConverterComponent

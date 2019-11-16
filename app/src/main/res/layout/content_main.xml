@@ -36,7 +36,6 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
                 android:layout_width="0dp"
-                android:background="#F00"
                 android:layout_height="0dp" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

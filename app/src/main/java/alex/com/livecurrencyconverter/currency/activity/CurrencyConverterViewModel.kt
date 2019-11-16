@@ -1,6 +1,7 @@
 package alex.com.livecurrencyconverter.currency.activity
 
 import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
+import alex.com.livecurrencyconverter.currency.entity.CurrencyEntity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -15,11 +16,11 @@ import java.io.IOException
 class CurrencyConverterViewModel(val currencyAPIClient: CurrencyAPIClient) : ViewModel() {
 
     // Observables
-    val currencyData = BehaviorSubject.create<Map<String, Double>>()
-    val statusText = MutableLiveData<String>()
+    val currencyData = MutableLiveData<List<CurrencyEntity>>()
 
     // Events
     val showErrorEvent = MutableLiveData<String>()
+    val showSnackbarEvent = MutableLiveData<String>()
     val finishedLoadingEvent = MutableLiveData<Unit>()
 
     private val disposables = CompositeDisposable()
@@ -35,7 +36,7 @@ class CurrencyConverterViewModel(val currencyAPIClient: CurrencyAPIClient) : Vie
     }
 
     fun getData() {
-        statusText.value = "Fetching data from server... "
+        showSnackbarEvent.value = "Fetching data from server... "
 
         // Kick off request
         val subscription = currencyAPIClient.getLiveCurrencyList()
@@ -47,8 +48,13 @@ class CurrencyConverterViewModel(val currencyAPIClient: CurrencyAPIClient) : Vie
                         throw IOException("Error: Network response body malformed")
                     }
 
-                    currencyData.onNext(response.quotes)
-                    statusText.postValue("Data loaded on ${response.timestamp}")
+                    //@@TODO: Clean up after DB made
+                    val data = response.quotes.map { a ->
+                        CurrencyEntity(a.key, a.value)
+                    }
+
+                    currencyData.postValue(data)
+                    showSnackbarEvent.postValue("Data loaded on ${response.timestamp}")
                     finishedLoadingEvent.postValue(null)
                 },
                 onError = { throwable ->
