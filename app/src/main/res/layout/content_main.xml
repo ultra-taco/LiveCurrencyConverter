@@ -9,20 +9,44 @@
         tools:context=".currency.activity.CurrencyConverterActivity"
         tools:showIn="@layout/activity_main">
 
-        <EditText
-            android:id="@+id/input_et"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+        <Spinner
+            android:id="@+id/currency_selector_spinner"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:background="#F00"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Spinner
-            android:id="@+id/currency_spinner"
+        <EditText
+            android:id="@+id/amount_et"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="1.00"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/currency_selector_spinner" />
+
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/input_et" />
+            android:layout_marginEnd="10dp"
+            android:background="#0F0"
+            android:gravity="bottom"
+            android:text="Select a currency:"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/currency_selector_spinner"
+            app:layout_constraintEnd_toStartOf="@id/currency_selector_spinner" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:gravity="bottom"
+            android:text="Enter an amount:"
+            android:textSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/amount_et"
+            app:layout_constraintEnd_toStartOf="@id/amount_et"
+            app:layout_constraintTop_toTopOf="@id/amount_et" />
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh_layout"
@@ -31,7 +55,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/currency_spinner">
+            app:layout_constraintTop_toBottomOf="@id/amount_et">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"

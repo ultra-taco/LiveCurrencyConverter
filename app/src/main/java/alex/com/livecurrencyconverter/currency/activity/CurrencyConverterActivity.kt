@@ -8,6 +8,8 @@ import alex.com.livecurrencyconverter.databinding.ActivityMainBinding
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.AdapterView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
@@ -44,11 +46,29 @@ class CurrencyConverterActivity : AppCompatActivity() {
     }
 
     private fun onViewCreated() {
+        // Setup list
         binding.contentMain.recyclerView.adapter = adapter
         binding.contentMain.recyclerView.layoutManager = GridLayoutManager(this, 3)
         binding.contentMain.swipeRefreshLayout.setOnRefreshListener {
             viewModel.getData()
         }
+
+        // Setup spinner
+        binding.contentMain.currencySelectorSpinner.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    
+                }
+
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                    // Do nothing
+                }
+            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
