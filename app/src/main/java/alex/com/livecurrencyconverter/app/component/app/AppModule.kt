@@ -15,11 +15,6 @@ class AppModule @Inject
 constructor(val application: Application) {
 
     @Provides
-    internal fun provideApplication(): Application {
-        return application
-    }
-
-    @Provides
     internal fun provideContext(): Context {
         return application.applicationContext
     }

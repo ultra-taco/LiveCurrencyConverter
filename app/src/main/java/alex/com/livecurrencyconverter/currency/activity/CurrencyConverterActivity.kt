@@ -5,7 +5,11 @@ import alex.com.livecurrencyconverter.app.LiveCurrencyConverterApp
 import alex.com.livecurrencyconverter.currency.activity.list.CurrencyAdapter
 import alex.com.livecurrencyconverter.currency.activity.list.QuotesAdapter
 import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
+import alex.com.livecurrencyconverter.currency.repository.currency.CurrencyRepository
+import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
 import alex.com.livecurrencyconverter.databinding.ActivityMainBinding
+import alex.com.livecurrencyconverter.other.CurrencyConverterConstants
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -23,11 +27,15 @@ import javax.inject.Inject
 class CurrencyConverterActivity : AppCompatActivity() {
 
     companion object {
-        private const val DESTINATION_CURRENCY_NONE_POSITION = 0
+        private const val ALL_CURRENCIES_POSITION = 0
     }
 
     @Inject
     lateinit var currencyAPIClient: CurrencyAPIClient
+    @Inject
+    lateinit var currencyRepository: CurrencyRepository
+    @Inject
+    lateinit var quoteRepository: QuoteRepository
 
     private val quotesAdapter = QuotesAdapter()
     private lateinit var sourceCurrencyAdapter: CurrencyAdapter
@@ -39,7 +47,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         // Inject Components
-        LiveCurrencyConverterApp.currencyConverterComponent.inject(this)
+        LiveCurrencyConverterApp.currencyComponent.inject(this)
 
         // Create content view
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -89,7 +97,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
                     position: Int,
                     id: Long
                 ) {
-                    val selectedCurrency = if (position == DESTINATION_CURRENCY_NONE_POSITION) {
+                    val selectedCurrency = if (position == ALL_CURRENCIES_POSITION) {
                         null
                     } else {
                         viewModel.currenciesObservable.value!![position - 1]
@@ -121,7 +129,18 @@ class CurrencyConverterActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = CurrencyConverterViewModel(application, currencyAPIClient)
+
+        val sharedPreferences = getSharedPreferences(
+            CurrencyConverterConstants.KEY_SHARED_PREFERENCES,
+            Context.MODE_PRIVATE
+        )
+
+        viewModel = CurrencyConverterViewModel(
+            currencyAPIClient = currencyAPIClient,
+            currencyRepository = currencyRepository,
+            quoteRepository = quoteRepository,
+            sharedPreferences = sharedPreferences
+        )
         viewModel.showErrorEvent.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         })
@@ -140,7 +159,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
 
             destinationCurrencyAdapter.clear()
             destinationCurrencyAdapter.addAll(currencyList)
-            destinationCurrencyAdapter.insert("<All>", DESTINATION_CURRENCY_NONE_POSITION)
+            destinationCurrencyAdapter.insert("<All>", ALL_CURRENCIES_POSITION)
         })
     }
 }

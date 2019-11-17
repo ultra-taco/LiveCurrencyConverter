@@ -1,6 +1,6 @@
 package alex.com.livecurrencyconverter.currency.activity.list
 
-import alex.com.livecurrencyconverter.currency.database.quote.QuoteEntity
+import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
 
 /**
  * Created by Alex Doub on 11/16/2019.

@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.currency.database.currency
+package alex.com.livecurrencyconverter.currency.repository.quote
 
 import android.content.Context
 import androidx.room.Database
@@ -9,25 +9,25 @@ import androidx.room.RoomDatabase
  * Created by Alex Doub on 11/16/2019.
  */
 
-@Database(entities = [CurrencyEntity::class], version = 1)
-abstract class CurrencyDatabase : RoomDatabase() {
+@Database(entities = [QuoteEntity::class], version = 1)
+abstract class QuotesDatabase : RoomDatabase() {
 
-    abstract fun currencyDao(): CurrencyDao
+    abstract fun quotesDao(): QuotesDao
 
     companion object {
 
         // marking the instance as volatile to ensure atomic access to the variable
         @Volatile
-        private var INSTANCE: CurrencyDatabase? = null
+        private var INSTANCE: QuotesDatabase? = null
 
-        fun getDatabase(context: Context): CurrencyDatabase {
+        fun getDatabase(context: Context): QuotesDatabase {
             if (INSTANCE == null) {
-                synchronized(CurrencyDatabase::class.java) {
+                synchronized(QuotesDatabase::class.java) {
                     if (INSTANCE == null) {
                         INSTANCE = Room.databaseBuilder(
                             context.applicationContext,
-                            CurrencyDatabase::class.java,
-                            "currency_database"
+                            QuotesDatabase::class.java,
+                            "quotes_database"
                         )
                             .fallbackToDestructiveMigration()
                             .build()

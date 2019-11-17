@@ -1,6 +1,6 @@
 package alex.com.livecurrencyconverter.currency.activity.list
 
-import alex.com.livecurrencyconverter.currency.database.quote.QuoteEntity
+import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 

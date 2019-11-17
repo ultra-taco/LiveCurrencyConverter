@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.currency.database.currency
+package alex.com.livecurrencyconverter.currency.repository.currency
 
 import androidx.room.Entity
 import androidx.room.Index

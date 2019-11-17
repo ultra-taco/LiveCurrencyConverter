@@ -1,11 +1,10 @@
 package alex.com.livecurrencyconverter.currency.activity
 
 import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
-import alex.com.livecurrencyconverter.currency.database.currency.CurrencyRepository
-import alex.com.livecurrencyconverter.currency.database.quote.QuoteEntity
-import alex.com.livecurrencyconverter.currency.database.quote.QuoteRepository
-import android.app.Application
-import android.content.Context
+import alex.com.livecurrencyconverter.currency.repository.currency.CurrencyRepository
+import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
+import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -18,8 +17,10 @@ import java.util.concurrent.TimeUnit
  */
 
 class CurrencyConverterViewModel(
-    application: Application,
-    private val currencyAPIClient: CurrencyAPIClient
+    private val currencyAPIClient: CurrencyAPIClient,
+    private val sharedPreferences: SharedPreferences,
+    private val currencyRepository: CurrencyRepository,
+    private val quoteRepository: QuoteRepository
 ) : ViewModel() {
 
     companion object {
@@ -27,17 +28,9 @@ class CurrencyConverterViewModel(
         private const val DEFAULT_AMOUNT = "1.00"
         private val DATA_STALE_DURATION = TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
 
-        private const val KEY_SHARED_PREFERENCES = "currency_preferences"
         private const val KEY_CURRENCIES_LAST_SAVED_AT = "currencies_last_saved_at"
         private const val KEY_QUOTES_LAST_SAVED_AT = "quotes_last_saved_at"
     }
-
-    private val sharedPrefs = application.getSharedPreferences(
-        KEY_SHARED_PREFERENCES,
-        Context.MODE_PRIVATE
-    )
-    private val currencyRepo = CurrencyRepository(application)
-    private val quotesRepo = QuoteRepository(application)
 
     // Observables
     val currenciesObservable = MutableLiveData<List<String>>()
@@ -81,7 +74,7 @@ class CurrencyConverterViewModel(
     }
 
     private fun observeCurrencyRepo() {
-        currencyRepo.currencies.observeForever { entities ->
+        currencyRepository.currencies.observeForever { entities ->
             val strings = entities.map { it.currency }
             currenciesObservable.postValue(strings)
             isLoadingCurrencies.postValue(false)
@@ -89,20 +82,20 @@ class CurrencyConverterViewModel(
     }
 
     private fun refreshCurrencies() {
-        val lastSavedTime = sharedPrefs.getLong(KEY_CURRENCIES_LAST_SAVED_AT, 0L)
+        val lastSavedTime = sharedPreferences.getLong(KEY_CURRENCIES_LAST_SAVED_AT, 0L)
         if (lastSavedTime + DATA_STALE_DURATION < System.currentTimeMillis()) {
             fetchCurrencies()
         }
     }
 
     private fun observeQuoteRepo() {
-        quotesRepo.quotes.observeForever {
+        quoteRepository.quotes.observeForever {
             createAdjustedQuotes()
         }
     }
 
     private fun refreshQuotes() {
-        val lastSavedTime = sharedPrefs.getLong(KEY_QUOTES_LAST_SAVED_AT, 0L)
+        val lastSavedTime = sharedPreferences.getLong(KEY_QUOTES_LAST_SAVED_AT, 0L)
         if (lastSavedTime + DATA_STALE_DURATION < System.currentTimeMillis()) {
             fetchQuotes()
         }
@@ -134,9 +127,9 @@ class CurrencyConverterViewModel(
     }
 
     fun clearData() {
-        currencyRepo.clearData()
-        quotesRepo.clearData()
-        sharedPrefs.edit().clear().apply()
+        currencyRepository.clearData()
+        quoteRepository.clearData()
+        sharedPreferences.edit().clear().apply()
         showSnackbarEvent.value = "DB & Prefs cleared. Pull to refresh to fetch data from server"
     }
 
@@ -155,10 +148,10 @@ class CurrencyConverterViewModel(
                         else -> {
 
                             // Save to repo
-                            currencyRepo.save(response.currencies)
+                            currencyRepository.save(response.currencies)
 
                             // Save timestamp
-                            sharedPrefs.edit()
+                            sharedPreferences.edit()
                                 .putLong(KEY_CURRENCIES_LAST_SAVED_AT, System.currentTimeMillis())
                                 .apply()
                         }
@@ -184,10 +177,10 @@ class CurrencyConverterViewModel(
                         response.quotes == null -> throw IOException("Error fetching quotes: Network response body malformed")
                         else -> {
                             // Save to repo
-                            quotesRepo.save(response.quotes)
+                            quoteRepository.save(response.quotes)
 
                             // Save timestamp
-                            sharedPrefs.edit()
+                            sharedPreferences.edit()
                                 .putLong(KEY_QUOTES_LAST_SAVED_AT, System.currentTimeMillis())
                                 .apply()
                         }
@@ -212,7 +205,7 @@ class CurrencyConverterViewModel(
     private fun createAdjustedQuotes() {
 
         // Assert repo is loaded
-        val quotes = quotesRepo.quotes.value
+        val quotes = quoteRepository.quotes.value
         if (quotes == null || quotes.isEmpty()) {
             println("Quotes DB empty")
             setAdjustedQuotes(emptyList())

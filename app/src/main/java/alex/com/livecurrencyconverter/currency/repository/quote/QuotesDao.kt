@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.currency.database.quote
+package alex.com.livecurrencyconverter.currency.repository.quote
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

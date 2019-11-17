@@ -4,9 +4,9 @@ import alex.com.livecurrencyconverter.app.component.app.AppComponent
 import alex.com.livecurrencyconverter.app.component.app.AppModule
 import alex.com.livecurrencyconverter.app.component.app.DaggerAppComponent
 import alex.com.livecurrencyconverter.app.component.network.NetworkModule
-import alex.com.livecurrencyconverter.currency.component.CurrencyConverterComponent
-import alex.com.livecurrencyconverter.currency.component.CurrencyConverterModule
-import alex.com.livecurrencyconverter.currency.component.DaggerCurrencyConverterComponent
+import alex.com.livecurrencyconverter.currency.component.CurrencyComponent
+import alex.com.livecurrencyconverter.currency.component.CurrencyModule
+import alex.com.livecurrencyconverter.currency.component.DaggerCurrencyComponent
 import android.app.Application
 import com.facebook.stetho.Stetho
 
@@ -15,10 +15,10 @@ class LiveCurrencyConverterApp : Application() {
     companion object {
         lateinit var appComponent: AppComponent
 
-        val currencyConverterComponent: CurrencyConverterComponent by lazy {
-            DaggerCurrencyConverterComponent.builder()
+        val currencyComponent: CurrencyComponent by lazy {
+            DaggerCurrencyComponent.builder()
                 .appComponent(appComponent)
-                .currencyConverterModule(CurrencyConverterModule()).build()
+                .currencyModule(CurrencyModule()).build()
         }
     }
 

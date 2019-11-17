@@ -1,6 +1,6 @@
 package alex.com.livecurrencyconverter.app.component.network
 
-import alex.com.livecurrencyconverter.other.Constants
+import alex.com.livecurrencyconverter.other.CurrencyConverterConstants
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.google.gson.GsonBuilder
 import dagger.Module
@@ -31,15 +31,15 @@ class NetworkModule {
 
     @Provides
     internal fun provideRetrofit(client: OkHttpClient): Retrofit {
-        val gson = GsonBuilder()
+        val gsonBuilder = GsonBuilder()
             .create()
-        val gsonFactory = GsonConverterFactory
-            .create(gson)
+        val gsonConverterFactory = GsonConverterFactory
+            .create(gsonBuilder)
 
         return Retrofit.Builder()
             .client(client)
-            .baseUrl(Constants.BASE_URL)
-            .addConverterFactory(gsonFactory)
+            .baseUrl(CurrencyConverterConstants.BASE_URL)
+            .addConverterFactory(gsonConverterFactory)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
     }

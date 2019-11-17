@@ -1,8 +1,6 @@
-package alex.com.livecurrencyconverter.currency.database.quote
+package alex.com.livecurrencyconverter.currency.repository.quote
 
-import alex.com.livecurrencyconverter.currency.database.currency.CurrencyDao
-import alex.com.livecurrencyconverter.currency.database.currency.CurrencyEntity
-import android.app.Application
+import android.content.Context
 import android.os.AsyncTask
 import androidx.lifecycle.LiveData
 
@@ -10,9 +8,9 @@ import androidx.lifecycle.LiveData
  * Created by Alex Doub on 11/16/2019.
  */
 
-class QuoteRepository(application: Application) {
+class QuoteRepository(context: Context) {
 
-    private val quoteDao: QuotesDao = QuotesDatabase.getDatabase(application).quotesDao()
+    private val quoteDao: QuotesDao = QuotesDatabase.getDatabase(context).quotesDao()
     val quotes: LiveData<List<QuoteEntity>> = quoteDao.getQuotes
 
     fun save(quotes: Map<String, Double>) {

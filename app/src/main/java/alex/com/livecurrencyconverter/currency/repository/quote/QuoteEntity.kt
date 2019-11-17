@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.currency.database.quote
+package alex.com.livecurrencyconverter.currency.repository.quote
 
 import androidx.room.Entity
 import androidx.room.Index
@@ -17,11 +17,3 @@ class QuoteEntity(
     val currency: String,
     val value: Double
 )
-
-//@@TODO: MOVE ME TO REPO
-fun Map<String, Double>.toQuotesList(): List<QuoteEntity> = map {
-    QuoteEntity(
-        it.key,
-        it.value
-    )
-}
