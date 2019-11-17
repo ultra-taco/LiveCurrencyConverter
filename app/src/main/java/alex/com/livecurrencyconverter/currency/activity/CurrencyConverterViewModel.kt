@@ -77,8 +77,7 @@ class CurrencyConverterViewModel(
     }
 
     private fun refreshCurrencies() {
-        val dataIsStale =
-            currencyRepository.getLastSavedTime() + DATA_STALE_DURATION < System.currentTimeMillis()
+        val dataIsStale = currencyRepository.getLastSavedTime() + DATA_STALE_DURATION < System.currentTimeMillis()
         if (dataIsStale) {
             fetchCurrencies()
         }
@@ -91,8 +90,7 @@ class CurrencyConverterViewModel(
     }
 
     private fun refreshQuotes() {
-        val dataIsStale =
-            quoteRepository.getLastSavedTime() + DATA_STALE_DURATION < System.currentTimeMillis()
+        val dataIsStale = quoteRepository.getLastSavedTime() + DATA_STALE_DURATION < System.currentTimeMillis()
         if (dataIsStale) {
             fetchQuotes()
         }
@@ -111,13 +109,11 @@ class CurrencyConverterViewModel(
         isLoadingObservable.postValue(isLoadingQuotes.value!! || isLoadingCurrencies.value!!)
     }
 
-    //TODO: Save to preferences?
     fun setSourceCurrency(currency: String) {
         sourceCurrency = currency
         createAdjustedQuotes()
     }
 
-    //TODO: Save to preferences?
     fun setDestinationCurrency(currency: String?) {
         destinationCurrency = currency
         createAdjustedQuotes()

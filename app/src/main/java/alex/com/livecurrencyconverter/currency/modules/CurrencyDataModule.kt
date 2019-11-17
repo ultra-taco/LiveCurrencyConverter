@@ -15,6 +15,14 @@ import dagger.Provides
 @Module
 class CurrencyDataModule {
     @Provides
+    internal fun provideCurrencySharedPreferences(context: Context): SharedPreferences {
+        return context.getSharedPreferences(
+            CurrencyConverterConstants.KEY_CURRENCY_SHARED_PREFERENCES,
+            Context.MODE_PRIVATE
+        )
+    }
+
+    @Provides
     internal fun provideCurrencyRepository(
         context: Context,
         sharedPreferences: SharedPreferences
@@ -28,13 +36,5 @@ class CurrencyDataModule {
         sharedPreferences: SharedPreferences
     ): QuoteRepository {
         return QuoteRepository(context, sharedPreferences)
-    }
-
-    @Provides
-    internal fun provideCurrencySharedPreferences(context: Context): SharedPreferences {
-        return context.getSharedPreferences(
-            CurrencyConverterConstants.KEY_CURRENCY_SHARED_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
     }
 }
