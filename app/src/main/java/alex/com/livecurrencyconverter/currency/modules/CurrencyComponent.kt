@@ -1,6 +1,6 @@
-package alex.com.livecurrencyconverter.currency.component
+package alex.com.livecurrencyconverter.currency.modules
 
-import alex.com.livecurrencyconverter.app.component.app.AppComponent
+import alex.com.livecurrencyconverter.app.modules.AppComponent
 import alex.com.livecurrencyconverter.currency.activity.CurrencyConverterActivity
 import dagger.Component
 import javax.inject.Scope
@@ -14,7 +14,10 @@ import javax.inject.Scope
 internal annotation class CurrencyScope
 
 @CurrencyScope
-@Component(dependencies = [AppComponent::class], modules = [CurrencyModule::class])
+@Component(
+    dependencies = [AppComponent::class],
+    modules = [CurrencyDataModule::class, CurrencyAPIModule::class]
+)
 interface CurrencyComponent {
     fun inject(activity: CurrencyConverterActivity)
 }

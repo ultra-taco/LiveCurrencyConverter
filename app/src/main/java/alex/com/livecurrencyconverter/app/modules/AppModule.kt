@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.app.component.app
+package alex.com.livecurrencyconverter.app.modules
 
 import android.app.Application
 import android.content.Context
@@ -12,11 +12,10 @@ import javax.inject.Inject
 
 @Module
 class AppModule @Inject
-constructor(val application: Application) {
+constructor(private val application: Application) {
 
     @Provides
     internal fun provideContext(): Context {
         return application.applicationContext
     }
 }
-

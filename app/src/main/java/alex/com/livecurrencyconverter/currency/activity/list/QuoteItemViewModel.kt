@@ -6,7 +6,7 @@ import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
  * Created by Alex Doub on 11/16/2019.
  */
 
-class QuoteItemViewModel (data: QuoteEntity) {
+class QuoteItemViewModel(data: QuoteEntity) {
 
     companion object {
         private const val MAX_DIGITS = 8
@@ -20,7 +20,7 @@ class QuoteItemViewModel (data: QuoteEntity) {
         val indexOfExponent = stringValue.indexOf("E")
 
         //Edge case -- the number is a massive exponent. Trim only the decimal component
-        if (indexOfExponent > 0 ) {
+        if (indexOfExponent > 0) {
             val exponentSubstring = stringValue.substringAfter("E")
             val startingLength = MAX_DIGITS - exponentSubstring.length
             stringValue.substringBefore("E").take(startingLength) + "E" + exponentSubstring

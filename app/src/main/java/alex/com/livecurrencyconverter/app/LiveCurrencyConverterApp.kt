@@ -1,12 +1,13 @@
 package alex.com.livecurrencyconverter.app
 
-import alex.com.livecurrencyconverter.app.component.app.AppComponent
-import alex.com.livecurrencyconverter.app.component.app.AppModule
-import alex.com.livecurrencyconverter.app.component.app.DaggerAppComponent
-import alex.com.livecurrencyconverter.app.component.network.NetworkModule
-import alex.com.livecurrencyconverter.currency.component.CurrencyComponent
-import alex.com.livecurrencyconverter.currency.component.CurrencyModule
-import alex.com.livecurrencyconverter.currency.component.DaggerCurrencyComponent
+import alex.com.livecurrencyconverter.app.modules.AppComponent
+import alex.com.livecurrencyconverter.app.modules.AppModule
+import alex.com.livecurrencyconverter.app.modules.DaggerAppComponent
+import alex.com.livecurrencyconverter.app.modules.NetworkModule
+import alex.com.livecurrencyconverter.currency.modules.CurrencyAPIModule
+import alex.com.livecurrencyconverter.currency.modules.CurrencyComponent
+import alex.com.livecurrencyconverter.currency.modules.CurrencyDataModule
+import alex.com.livecurrencyconverter.currency.modules.DaggerCurrencyComponent
 import android.app.Application
 import com.facebook.stetho.Stetho
 
@@ -15,10 +16,14 @@ class LiveCurrencyConverterApp : Application() {
     companion object {
         lateinit var appComponent: AppComponent
 
+        // The currency component lives here so if any other activities/fragments would
+        // use it, they would share the same data without duplicating the modules
         val currencyComponent: CurrencyComponent by lazy {
             DaggerCurrencyComponent.builder()
                 .appComponent(appComponent)
-                .currencyModule(CurrencyModule()).build()
+                .currencyAPIModule(CurrencyAPIModule())
+                .currencyDataModule(CurrencyDataModule())
+                .build()
         }
     }
 

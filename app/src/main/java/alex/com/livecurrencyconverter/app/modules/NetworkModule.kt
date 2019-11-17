@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.app.component.network
+package alex.com.livecurrencyconverter.app.modules
 
 import alex.com.livecurrencyconverter.other.CurrencyConverterConstants
 import com.facebook.stetho.okhttp3.StethoInterceptor
