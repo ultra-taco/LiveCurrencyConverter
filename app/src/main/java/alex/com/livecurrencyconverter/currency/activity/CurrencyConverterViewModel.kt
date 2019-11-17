@@ -4,7 +4,6 @@ import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.currency.repository.currency.CurrencyRepository
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
-import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -18,7 +17,6 @@ import java.util.concurrent.TimeUnit
 
 class CurrencyConverterViewModel(
     private val currencyAPIClient: CurrencyAPIClient,
-    private val sharedPreferences: SharedPreferences,
     private val currencyRepository: CurrencyRepository,
     private val quoteRepository: QuoteRepository
 ) : ViewModel() {
@@ -27,9 +25,6 @@ class CurrencyConverterViewModel(
         private const val DEFAULT_CURRENCY = "USD"    // API sets USD as the default currency
         private const val DEFAULT_AMOUNT = "1.00"
         private val DATA_STALE_DURATION = TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
-
-        private const val KEY_CURRENCIES_LAST_SAVED_AT = "currencies_last_saved_at"
-        private const val KEY_QUOTES_LAST_SAVED_AT = "quotes_last_saved_at"
     }
 
     // Observables
@@ -82,8 +77,9 @@ class CurrencyConverterViewModel(
     }
 
     private fun refreshCurrencies() {
-        val lastSavedTime = sharedPreferences.getLong(KEY_CURRENCIES_LAST_SAVED_AT, 0L)
-        if (lastSavedTime + DATA_STALE_DURATION < System.currentTimeMillis()) {
+        val dataIsStale =
+            currencyRepository.getLastSavedTime() + DATA_STALE_DURATION < System.currentTimeMillis()
+        if (dataIsStale) {
             fetchCurrencies()
         }
     }
@@ -95,8 +91,9 @@ class CurrencyConverterViewModel(
     }
 
     private fun refreshQuotes() {
-        val lastSavedTime = sharedPreferences.getLong(KEY_QUOTES_LAST_SAVED_AT, 0L)
-        if (lastSavedTime + DATA_STALE_DURATION < System.currentTimeMillis()) {
+        val dataIsStale =
+            quoteRepository.getLastSavedTime() + DATA_STALE_DURATION < System.currentTimeMillis()
+        if (dataIsStale) {
             fetchQuotes()
         }
     }
@@ -129,7 +126,6 @@ class CurrencyConverterViewModel(
     fun clearData() {
         currencyRepository.clearData()
         quoteRepository.clearData()
-        sharedPreferences.edit().clear().apply()
         showSnackbarEvent.value = "DB & Prefs cleared. Pull to refresh to fetch data from server"
     }
 
@@ -149,11 +145,6 @@ class CurrencyConverterViewModel(
 
                             // Save to repo
                             currencyRepository.save(response.currencies)
-
-                            // Save timestamp
-                            sharedPreferences.edit()
-                                .putLong(KEY_CURRENCIES_LAST_SAVED_AT, System.currentTimeMillis())
-                                .apply()
                         }
                     }
                 },
@@ -178,11 +169,6 @@ class CurrencyConverterViewModel(
                         else -> {
                             // Save to repo
                             quoteRepository.save(response.quotes)
-
-                            // Save timestamp
-                            sharedPreferences.edit()
-                                .putLong(KEY_QUOTES_LAST_SAVED_AT, System.currentTimeMillis())
-                                .apply()
                         }
                     }
                 },

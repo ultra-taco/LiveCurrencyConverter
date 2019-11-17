@@ -129,17 +129,10 @@ class CurrencyConverterActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-
-        val sharedPreferences = getSharedPreferences(
-            CurrencyConverterConstants.KEY_SHARED_PREFERENCES,
-            Context.MODE_PRIVATE
-        )
-
         viewModel = CurrencyConverterViewModel(
             currencyAPIClient = currencyAPIClient,
             currencyRepository = currencyRepository,
-            quoteRepository = quoteRepository,
-            sharedPreferences = sharedPreferences
+            quoteRepository = quoteRepository
         )
         viewModel.showErrorEvent.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()

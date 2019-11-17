@@ -11,6 +11,6 @@ class CurrencyConverterConstants {
         const val API_KEY = "60ba8620db26e7afeafbcf3399eb859d"
 
         //Data
-        const val KEY_SHARED_PREFERENCES = "currency_preferences"
+        const val KEY_CURRENCY_SHARED_PREFERENCES = "currency_shared_preferences"
     }
 }
