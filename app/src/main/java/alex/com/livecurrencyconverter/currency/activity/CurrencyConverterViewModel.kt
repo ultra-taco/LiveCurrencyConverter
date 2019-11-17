@@ -219,15 +219,6 @@ class CurrencyConverterViewModel(
             return
         }
 
-        // (Debug) Assert repos are not corrupt or out of sync
-        if (quotes.find { it.currency == DEFAULT_CURRENCY + sourceCurrency } == null) {
-            println("Database is loaded but could not find this currency in quotes...")
-            showErrorEvent.postValue("A database error has occurred, refreshing everything...")
-            clearData()
-            refreshData()
-            return
-        }
-
         // Find source conversion rate.
         var sourceConversionRate = 1.0
         if (sourceCurrency != DEFAULT_CURRENCY) {
