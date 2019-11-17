@@ -43,6 +43,7 @@ class CurrencyConverterViewModel(
     val currenciesObservable = MutableLiveData<List<String>>()
     val quotesObservable = MutableLiveData<List<QuoteEntity>>()
     val isLoadingObservable = MutableLiveData<Boolean>()
+    val isEmptyObservable = MutableLiveData<Boolean>()
     val amountObservable = MutableLiveData<String>().apply { value = DEFAULT_AMOUNT }
 
     // Events
@@ -214,8 +215,7 @@ class CurrencyConverterViewModel(
         val quotes = quotesRepo.quotes.value
         if (quotes == null || quotes.isEmpty()) {
             println("Quotes DB empty")
-            quotesObservable.postValue(null)
-            isLoadingQuotes.postValue(false)
+            setAdjustedQuotes(emptyList())
             return
         }
 
@@ -248,7 +248,12 @@ class CurrencyConverterViewModel(
             }
         } ?: adjustedQuotes
 
-        quotesObservable.postValue(filteredQuotes)
+        setAdjustedQuotes(filteredQuotes)
+    }
+
+    private fun setAdjustedQuotes(adjustedQuotes: List<QuoteEntity>) {
         isLoadingQuotes.postValue(false)
+        isEmptyObservable.postValue(adjustedQuotes.isEmpty())
+        quotesObservable.postValue(adjustedQuotes)
     }
 }

@@ -110,11 +110,24 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view"
-                visible="@{!viewModel.isLoadingObservable()}"
                 android:layout_width="0dp"
                 android:layout_height="0dp" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <!-- Empty View -->
+        <TextView
+            android:id="@+id/empty_view"
+            visible="@{viewModel.isEmptyObservable()}"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:text="No Data Loaded"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@id/swipe_refresh_layout"
+            app:layout_constraintEnd_toEndOf="@id/swipe_refresh_layout"
+            app:layout_constraintStart_toStartOf="@id/swipe_refresh_layout"
+            app:layout_constraintTop_toTopOf="@id/swipe_refresh_layout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
