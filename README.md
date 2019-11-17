@@ -50,7 +50,7 @@ CurrencyComponent
 
 * App Component - Contains all the modules core to the app
 * App Module - Provides app context
-* Network Module - Provides API agnostic Retrofit client
+* Network Module - Provides API agnostic Retrofit client  
 
 * Currency Component - Contains all the modules required for Currency Conversion
 * Currency API Module - Uses Network Module to provide a baked API for the currency API
