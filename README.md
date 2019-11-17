@@ -21,23 +21,30 @@ Select a source currency, destination currency, and input the currency amount. T
 Here is a high level overview of the project. It is organized and structured around the module components.
 
 ```
-Dagger Components
-    │
-    ├──{AppComponent}
-    │   ├── [AppModule]
-    │   │   └──AppContext -> ─┐
-    │   └── [NetworkModule]   │
-    │       └──Retrofit -> ───┤
-    │                         │
-    └──────────────── {CurrencyComponent}
-                          ├──[CurrencyAPIModule] 
-                          │   └──CurrencyAPIClient -> ┐
-                          └──CurrencyDataModule       |
-                             └──CurrencyRepository -> ┤
-                             └──QuoteRepository -> ───┤
-                                                      ↓
-                                              CurrencyActivity
-                                                └──CurrencyViewModel
+Dagger Component & Module Hierarchy
+    
+{ AppComponent }
+       ┃
+       ┣━━━[AppModule]
+       ┃    └──AppContext─>──┒
+       ┗━━━[NetworkModule]   ┃
+            └──Retrofit─>────┫
+                             ┃
+┏<━━━<━━━<━━━<━━━<━━━<━━━<━━━┛
+┃    
+┗━━{ CurrencyComponent }
+      ┃
+      ┗━[CurrencyAPIModule] 
+      ┃   └──CurrencyAPIClient─>──────┒
+      ┃                               ┃
+      ┗━━CurrencyDataModule           ┃
+             ├──CurrencyRepository─>──┫
+             └──QuoteRepository─>─────┫
+                                      ┃
+                                (Injects Into)
+                                      ↓
+                             CurrencyActivity
+                               └──CurrencyViewModel
                                        
 ```
 
