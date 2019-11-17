@@ -83,6 +83,7 @@ class CurrencyConverterViewModel(
         currencyRepo.currencies.observeForever { entities ->
             val strings = entities.map { it.currency }
             currenciesObservable.postValue(strings)
+            isLoadingCurrencies.postValue(false)
         }
     }
 
@@ -107,10 +108,10 @@ class CurrencyConverterViewModel(
     }
 
     private fun observeIsLoading() {
-        isLoadingCurrencies.observeForever{
+        isLoadingCurrencies.observeForever {
             refreshIsLoading()
         }
-        isLoadingQuotes.observeForever{
+        isLoadingQuotes.observeForever {
             refreshIsLoading()
         }
     }
@@ -159,8 +160,6 @@ class CurrencyConverterViewModel(
                             sharedPrefs.edit()
                                 .putLong(KEY_CURRENCIES_LAST_SAVED_AT, System.currentTimeMillis())
                                 .apply()
-
-                            isLoadingCurrencies.postValue(false)
                         }
                     }
                 },
@@ -190,8 +189,6 @@ class CurrencyConverterViewModel(
                             sharedPrefs.edit()
                                 .putLong(KEY_QUOTES_LAST_SAVED_AT, System.currentTimeMillis())
                                 .apply()
-
-                            isLoadingQuotes.postValue(false)
                         }
                     }
                 },
@@ -218,6 +215,7 @@ class CurrencyConverterViewModel(
         if (quotes == null || quotes.isEmpty()) {
             println("Quotes DB empty")
             quotesObservable.postValue(null)
+            isLoadingQuotes.postValue(false)
             return
         }
 
@@ -247,10 +245,7 @@ class CurrencyConverterViewModel(
                 )
             } else {
                 val newCurrency = it.currency.replaceFirst(DEFAULT_CURRENCY, sourceCurrency)
-                QuoteEntity(
-                    newCurrency,
-                    newValue
-                )
+                QuoteEntity(newCurrency, newValue)
             }
         }
 
@@ -262,5 +257,6 @@ class CurrencyConverterViewModel(
         } ?: adjustedQuotes
 
         quotesObservable.postValue(filteredQuotes)
+        isLoadingQuotes.postValue(false)
     }
 }
