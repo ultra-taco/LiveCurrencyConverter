@@ -67,7 +67,7 @@ class CurrencyConverterViewModel(
     private fun observeAmountChanges() {
         amountObservable.observeForever { amount ->
             if (amount?.toDoubleOrNull() == null) {
-                showSnackbarEvent.postValue("Input is not a number")
+                showSnackbarEvent.postValue("Amount is not a number")
             }
             createAdjustedQuotes()
         }
