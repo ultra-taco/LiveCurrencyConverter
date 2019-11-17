@@ -4,7 +4,6 @@ import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.currency.database.currency.CurrencyRepository
 import alex.com.livecurrencyconverter.currency.database.quote.QuoteEntity
 import alex.com.livecurrencyconverter.currency.database.quote.QuoteRepository
-import alex.com.livecurrencyconverter.other.Constants
 import android.app.Application
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
@@ -28,12 +27,13 @@ class CurrencyConverterViewModel(
         private const val DEFAULT_AMOUNT = "1.00"
         private val DATA_STALE_DURATION = TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
 
+        private const val KEY_SHARED_PREFERENCES = "currency_preferences"
         private const val KEY_CURRENCIES_LAST_SAVED_AT = "currencies_last_saved_at"
         private const val KEY_QUOTES_LAST_SAVED_AT = "quotes_last_saved_at"
     }
 
     private val sharedPrefs = application.getSharedPreferences(
-        Constants.SESSION_SHARED_PREFERENCES,
+        KEY_SHARED_PREFERENCES,
         Context.MODE_PRIVATE
     )
     private val currencyRepo = CurrencyRepository(application)
@@ -222,7 +222,7 @@ class CurrencyConverterViewModel(
         // (Debug) Assert repos are not corrupt or out of sync
         if (quotes.find { it.currency == DEFAULT_CURRENCY + sourceCurrency } == null) {
             println("Database is loaded but could not find this currency in quotes...")
-            showErrorEvent.postValue("A database error has occurred, refreshing DB...")
+            showErrorEvent.postValue("A database error has occurred, refreshing everything...")
             clearData()
             refreshData()
             return
@@ -231,7 +231,8 @@ class CurrencyConverterViewModel(
         // Find source conversion rate.
         var sourceConversionRate = 1.0
         if (sourceCurrency != DEFAULT_CURRENCY) {
-            sourceConversionRate = quotes.find { it.currency == DEFAULT_CURRENCY + sourceCurrency }!!.value
+            sourceConversionRate =
+                quotes.find { it.currency == DEFAULT_CURRENCY + sourceCurrency }!!.value
         }
 
         // Update quotes according to selected source currency

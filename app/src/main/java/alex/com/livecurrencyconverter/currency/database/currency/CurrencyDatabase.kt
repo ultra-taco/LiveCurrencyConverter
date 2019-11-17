@@ -1,7 +1,5 @@
 package alex.com.livecurrencyconverter.currency.database.currency
 
-import alex.com.livecurrencyconverter.currency.database.quote.QuoteEntity
-import alex.com.livecurrencyconverter.currency.database.quote.QuotesDao
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
