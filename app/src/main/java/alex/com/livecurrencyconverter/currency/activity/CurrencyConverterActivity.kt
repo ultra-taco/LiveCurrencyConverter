@@ -6,7 +6,6 @@ import alex.com.livecurrencyconverter.currency.activity.list.CurrencyAdapter
 import alex.com.livecurrencyconverter.currency.activity.list.QuotesAdapter
 import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.databinding.ActivityMainBinding
-import android.app.Application
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -58,7 +57,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
         binding.content.recyclerView.adapter = quotesAdapter
         binding.content.recyclerView.layoutManager = GridLayoutManager(this, 3)
         binding.content.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.getQuotes()
+            viewModel.refreshData()
         }
 
         // Setup source selector

@@ -19,11 +19,6 @@ class QuoteItemViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(data: QuoteItemViewModel) {
-
-        if (data.currency.length != 6) {
-            println("whoa")
-        }
-
         binding.viewModel = data
         binding.executePendingBindings()
     }

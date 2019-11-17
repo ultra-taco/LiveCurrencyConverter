@@ -1,4 +1,4 @@
-package alex.com.livecurrencyconverter.currency.entity
+package alex.com.livecurrencyconverter.currency.database.currency
 
 import androidx.room.Entity
 import androidx.room.Index
@@ -9,13 +9,11 @@ import androidx.room.PrimaryKey
  */
 
 @Entity(
-    tableName = "quotes_table",
+    tableName = "currency_table",
     indices = [Index(value = ["currency"])]
 )
-class QuoteEntity(
+class CurrencyEntity(
     @PrimaryKey
     val currency: String,
-    val value: Double
+    val name: String
 )
-
-fun Map<String, Double>.toQuotesList(): List<QuoteEntity> = map { QuoteEntity(it.key, it.value) }
