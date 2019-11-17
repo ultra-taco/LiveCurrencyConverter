@@ -1,6 +1,6 @@
 package alex.com.livecurrencyconverter.currency.activity.list
 
-import alex.com.livecurrencyconverter.currency.entity.Quote
+import alex.com.livecurrencyconverter.currency.entity.QuoteEntity
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
@@ -12,7 +12,7 @@ class QuotesAdapter : RecyclerView.Adapter<QuoteItemViewHolder>() {
 
     private var items: List<QuoteItemViewModel> = emptyList()
 
-    fun setData(entities: List<Quote>) {
+    fun setData(entities: List<QuoteEntity>) {
         items = entities.map { QuoteItemViewModel((it)) }
         notifyDataSetChanged()
     }

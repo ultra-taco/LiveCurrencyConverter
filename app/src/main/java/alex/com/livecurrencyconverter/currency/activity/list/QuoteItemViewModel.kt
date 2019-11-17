@@ -1,12 +1,12 @@
 package alex.com.livecurrencyconverter.currency.activity.list
 
-import alex.com.livecurrencyconverter.currency.entity.Quote
+import alex.com.livecurrencyconverter.currency.entity.QuoteEntity
 
 /**
  * Created by Alex Doub on 11/16/2019.
  */
 
-class QuoteItemViewModel (data: Quote) {
+class QuoteItemViewModel (data: QuoteEntity) {
 
     companion object {
         private const val MAX_DIGITS = 8

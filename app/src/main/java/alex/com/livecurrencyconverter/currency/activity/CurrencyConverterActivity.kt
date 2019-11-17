@@ -6,6 +6,7 @@ import alex.com.livecurrencyconverter.currency.activity.list.CurrencyAdapter
 import alex.com.livecurrencyconverter.currency.activity.list.QuotesAdapter
 import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.databinding.ActivityMainBinding
+import android.app.Application
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -121,7 +122,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = CurrencyConverterViewModel(currencyAPIClient)
+        viewModel = CurrencyConverterViewModel(application, currencyAPIClient)
         viewModel.showErrorEvent.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         })

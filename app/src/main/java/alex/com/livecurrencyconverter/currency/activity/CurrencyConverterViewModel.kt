@@ -1,8 +1,10 @@
 package alex.com.livecurrencyconverter.currency.activity
 
 import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
-import alex.com.livecurrencyconverter.currency.entity.Quote
+import alex.com.livecurrencyconverter.currency.database.QuotesRepository
+import alex.com.livecurrencyconverter.currency.entity.QuoteEntity
 import alex.com.livecurrencyconverter.currency.entity.toQuotesList
+import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -13,16 +15,18 @@ import java.io.IOException
  * Created by Alex Doub on 11/13/2019.
  */
 
-class CurrencyConverterViewModel(private val currencyAPIClient: CurrencyAPIClient) : ViewModel() {
+class CurrencyConverterViewModel(application: Application, private val currencyAPIClient: CurrencyAPIClient) : ViewModel() {
 
     companion object {
         private const val DEFAULT_CURRENCY = "USD"    // API sets USD as the default currency
         private const val DEFAULT_AMOUNT = "1.00"
     }
 
+    val repository = QuotesRepository(application)
+
     // Observables
     val currenciesObservable = MutableLiveData<List<String>>()
-    val quotesObservable = MutableLiveData<List<Quote>>()
+    val quotesObservable = MutableLiveData<List<QuoteEntity>>()
     val isLoadingObservable = MutableLiveData<Boolean>()
     val amountObservable = MutableLiveData<String>().apply { value = DEFAULT_AMOUNT }
 
@@ -32,7 +36,7 @@ class CurrencyConverterViewModel(private val currencyAPIClient: CurrencyAPIClien
 
     // Private data
     private val disposables = CompositeDisposable()
-    private var baseQuotes: List<Quote> = emptyList()
+    private var baseQuotes: List<QuoteEntity> = emptyList()
     private var sourceCurrency: String = DEFAULT_CURRENCY
     private var destinationCurrency: String? = null
 
@@ -142,15 +146,15 @@ class CurrencyConverterViewModel(private val currencyAPIClient: CurrencyAPIClien
         val adjustedQuotes = baseQuotes.map {
             val newValue = amount * it.value / sourceConversionRate
             if (sourceCurrency == DEFAULT_CURRENCY) {
-                Quote(it.currency, newValue)
+                QuoteEntity(it.currency, newValue)
             } else {
                 val newCurrency = it.currency.replaceFirst(DEFAULT_CURRENCY, sourceCurrency)
-                Quote(newCurrency, newValue)
+                QuoteEntity(newCurrency, newValue)
             }
         }
 
         // Lastly, optionally filter to destination currency
-        val filteredQuotes: List<Quote> = destinationCurrency?.let { destinationCurrency ->
+        val filteredQuotes: List<QuoteEntity> = destinationCurrency?.let { destinationCurrency ->
             adjustedQuotes.filter { quote ->
                 quote.currency.endsWith(destinationCurrency)
             }
