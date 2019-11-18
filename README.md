@@ -5,18 +5,18 @@ This app shows you what a monetary amount converts to from one currency to anoth
 ## Overview ##
 
 The project is designed with several paradigms:
--Modularization of components using Dagger to support scalability
--MVVM: Strict separation of view and model data
--Reactive paradigms to minimize complexity and duplication of data
--View lifecycle aware viewmodels for performance (if the app had more activities/fragments)
--Discrete model repositories backed with Room Persistance Library
--Material UI Design to look stylish
+* Modularization of components using Dagger to support app scalability
+* MVVM: Strict separation of view, model and viewmodel data
+* Reactive paradigms to minimize complexity and duplication
+* View lifecycle aware data for performance (if the app had more activities/fragments)
+* Discrete model repositories backed with Room Persistance Library for offline usage
+* Material UI Design to look stylish
 
 ## Usage ##
 
 Select a source currency, destination currency, and input the currency amount. The list below will populate with the conversion rate between those currencies. In the action bar menu, you may clear the database at any time. Additionally, you may swipe down to refresh the data if it has grown stale.
 
-## Components ##
+## Internal Components (Dagger) ##
 
 Here is a high level overview of the project. It is organized and structured around the module components.
 
@@ -62,7 +62,7 @@ Thus, CurrencyActivity has all its required dependencies for its viewmodel
 
 All the logic for data loading, currency conversion, and managing in-memory data happens in CurrencyViewModel. The viewmodel observes the repositories and transforms the raw data into processed data for the view to easily consume. 
 
-This is the data flow for how quotes are loaded
+This is the data flow for how quotes are loaded. This does not include loading the currency list.
 1) App starts or user swipes down to refresh
 2) Viewmodel fetches data from the API if data is stale
 3) Retrofit kicks off network request
