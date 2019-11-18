@@ -2,6 +2,8 @@
 
 This app shows you what a monetary amount converts to from one currency to another using the Currency Layer API.
 
+<img src="screenshots/screenshot_1.png"/>
+
 ## Overview ##
 
 The project is designed with several paradigms:
