@@ -46,8 +46,10 @@ CurrencyComponent
                                 (Injects Into)
                                       ↓
                                 CurrencyActivity
-                                  └──CurrencyViewModel
-                                       
+                                      │
+                                 (Passes into)
+                                      ↓
+                               CurrencyViewModel
 ```
 
 App Component - Contains all the modules core to the app
