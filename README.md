@@ -37,19 +37,19 @@ AppComponent
 CurrencyComponent
       │
       ├──CurrencyAPIModule
-      │   └──CurrencyAPIClient─>──────┐
-      │                               │
-      └──CurrencyDataModule           │
-             ├──CurrencyRepository─>──┤
-             └──QuoteRepository─>─────┤
-                                      │
-                                (Injects Into)
-                                      ↓
-                                CurrencyActivity
-                                      │
-                                 (Passes into)
-                                      ↓
-                               CurrencyViewModel
+      │     └──CurrencyAPIClient─>───┐
+      │                              │
+      └──CurrencyDataModule          │
+            ├──CurrencyRepository─>──┤
+            └──QuoteRepository─>─────┤
+                                     │
+                               (Injects Into)
+                                     ↓
+                               CurrencyActivity
+                                     │
+                               (Passes into)
+                                     ↓
+                              CurrencyViewModel
 ```
 
 App Component - Contains all the modules core to the app
