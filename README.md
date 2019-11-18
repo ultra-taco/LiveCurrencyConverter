@@ -5,12 +5,12 @@ This app shows you what a monetary amount converts to from one currency to anoth
 ## Overview ##
 
 The project is designed with several paradigms:
--Modularization of components using Dagger to support scalability
--MVVM: Strict separation of view and model data
--Reactive paradigms to minimize complexity and duplication of data
--View lifecycle aware viewmodels for performance (if the app had more activities/fragments)
--Discrete model repositories backed with Room Persistance Library
--Material UI Design to look stylish
+* Modularization of components using Dagger to support scalability
+* MVVM: Strict separation of view and model data
+* Reactive paradigms to minimize complexity and duplication of data
+* View lifecycle aware viewmodels for performance (if the app had more activities/fragments)
+* Discrete model repositories backed with Room Persistance Library
+* Material UI Design to look stylish
 
 ## Usage ##
 
