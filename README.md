@@ -57,7 +57,7 @@ App Component - Contains all the modules core to the app
 * Network Module - Provides API agnostic Retrofit client  
 
 Currency Component - Contains all the modules required for Currency Conversion
-* Currency API Module - Uses Network Module to provide a baked API for the currency API
+* Currency API Module - Uses Network Module to provide a baked client with the currency API
 * Currency Data Module - Uses App Module to provide both repositories
 
 Thus, CurrencyActivity has all its required dependencies for its viewmodel 
