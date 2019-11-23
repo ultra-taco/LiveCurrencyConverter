@@ -52,6 +52,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
         // Create content view
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
+        binding.content.lifecycleOwner = this
         setSupportActionBar(toolbar)
         onViewCreated()
 
