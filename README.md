@@ -2,6 +2,8 @@
 
 This app shows you what a monetary amount converts to from one currency to another using the Currency Layer API.
 
+<img src="screenshots/screenshot_1.png"/>
+
 ## Overview ##
 
 The project is designed with several paradigms:
@@ -35,17 +37,19 @@ AppComponent
 CurrencyComponent
       │
       ├──CurrencyAPIModule
-      │   └──CurrencyAPIClient─>──────┐
-      │                               │
-      └──CurrencyDataModule           │
-             ├──CurrencyRepository─>──┤
-             └──QuoteRepository─>─────┤
-                                      │
-                                (Injects Into)
-                                      ↓
-                                CurrencyActivity
-                                  └──CurrencyViewModel
-                                       
+      │     └──CurrencyAPIClient─>───┐
+      │                              │
+      └──CurrencyDataModule          │
+            ├──CurrencyRepository─>──┤
+            └──QuoteRepository─>─────┤
+                                     │
+                               (Injects Into)
+                                     ↓
+                               CurrencyActivity
+                                     │
+                               (Passes into)
+                                     ↓
+                              CurrencyViewModel
 ```
 
 App Component - Contains all the modules core to the app
@@ -53,7 +57,7 @@ App Component - Contains all the modules core to the app
 * Network Module - Provides API agnostic Retrofit client  
 
 Currency Component - Contains all the modules required for Currency Conversion
-* Currency API Module - Uses Network Module to provide a baked API for the currency API
+* Currency API Module - Uses Network Module to provide a baked client with the currency API
 * Currency Data Module - Uses App Module to provide both repositories
 
 Thus, CurrencyActivity has all its required dependencies for its viewmodel 
