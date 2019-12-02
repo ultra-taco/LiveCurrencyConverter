@@ -7,6 +7,7 @@ import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import java.io.IOException
@@ -238,5 +239,20 @@ class CurrencyConverterViewModel(
         isLoadingQuotes.postValue(false)
         _isEmptyObservable.postValue(adjustedQuotes.isEmpty())
         _quotesObservable.postValue(adjustedQuotes)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    class Factory(
+        private val currencyAPIClient: CurrencyAPIClient,
+        private val currencyRepository: CurrencyRepository,
+        private val quoteRepository: QuoteRepository
+    ) : ViewModelProvider.Factory {
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return CurrencyConverterViewModel(
+                currencyAPIClient = currencyAPIClient,
+                currencyRepository = currencyRepository,
+                quoteRepository = quoteRepository
+            ) as T
+        }
     }
 }

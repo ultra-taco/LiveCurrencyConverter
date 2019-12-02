@@ -19,6 +19,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -130,11 +131,12 @@ class CurrencyConverterActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = CurrencyConverterViewModel(
+        val factory = CurrencyConverterViewModel.Factory(
             currencyAPIClient = currencyAPIClient,
             currencyRepository = currencyRepository,
             quoteRepository = quoteRepository
         )
+        viewModel = ViewModelProviders.of(this, factory).get(CurrencyConverterViewModel::class.java)
         viewModel.showErrorEvent.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         })
