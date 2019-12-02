@@ -8,8 +8,6 @@ import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.currency.repository.currency.CurrencyRepository
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
 import alex.com.livecurrencyconverter.databinding.ActivityMainBinding
-import alex.com.livecurrencyconverter.other.CurrencyConverterConstants
-import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,7 +17,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
@@ -136,7 +134,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
             currencyRepository = currencyRepository,
             quoteRepository = quoteRepository
         )
-        viewModel = ViewModelProviders.of(this, factory).get(CurrencyConverterViewModel::class.java)
+        viewModel = ViewModelProvider(this, factory).get(CurrencyConverterViewModel::class.java)
         viewModel.showErrorEvent.observe(this, Observer { message ->
             Toast.makeText(this, message, Toast.LENGTH_LONG).show()
         })
