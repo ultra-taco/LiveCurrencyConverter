@@ -206,10 +206,7 @@ class CurrencyConverterViewModel(
         val adjustedQuotes = quotes.map {
             val newValue = amount * it.value / sourceConversionRate
             if (sourceCurrency == DEFAULT_CURRENCY) {
-                QuoteEntity(
-                    it.currency,
-                    newValue
-                )
+                QuoteEntity(it.currency, newValue)
             } else {
                 val newCurrency = it.currency.replaceFirst(DEFAULT_CURRENCY, sourceCurrency)
                 QuoteEntity(newCurrency, newValue)
