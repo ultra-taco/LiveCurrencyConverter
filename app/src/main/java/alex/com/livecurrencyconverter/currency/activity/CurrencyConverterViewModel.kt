@@ -4,6 +4,7 @@ import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.currency.repository.currency.CurrencyRepository
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.disposables.CompositeDisposable
@@ -27,11 +28,21 @@ class CurrencyConverterViewModel(
         private val DATA_STALE_DURATION = TimeUnit.MILLISECONDS.convert(30, TimeUnit.MINUTES)
     }
 
-    // Observables
-    val currenciesObservable = MutableLiveData<List<String>>()
-    val quotesObservable = MutableLiveData<List<QuoteEntity>>()
-    val isLoadingObservable = MutableLiveData<Boolean>()
-    val isEmptyObservable = MutableLiveData<Boolean>()
+    // Read-Only Observables
+    private val _currenciesObservable = MutableLiveData<List<String>>()
+    val currenciesObservable: LiveData<List<String>>
+        get() = _currenciesObservable
+    private val _quotesObservable = MutableLiveData<List<QuoteEntity>>()
+    val quotesObservable: LiveData<List<QuoteEntity>>
+        get() = _quotesObservable
+    private val _isLoadingObservable = MutableLiveData<Boolean>()
+    val isLoadingObservable: LiveData<Boolean>
+        get() = _isLoadingObservable
+    private val _isEmptyObservable = MutableLiveData<Boolean>()
+    val isEmptyObservable: LiveData<Boolean>
+        get() = _isEmptyObservable
+
+    // 2-way Observables
     val amountObservable = MutableLiveData<String>().apply { value = DEFAULT_AMOUNT }
 
     // Events
@@ -42,8 +53,8 @@ class CurrencyConverterViewModel(
     private val disposables = CompositeDisposable()
     private var sourceCurrency: String = DEFAULT_CURRENCY
     private var destinationCurrency: String? = null
-    private var isLoadingCurrencies = MutableLiveData<Boolean>().apply { value = false }
-    private var isLoadingQuotes = MutableLiveData<Boolean>().apply { value = false }
+    private val isLoadingCurrencies = MutableLiveData<Boolean>().apply { value = false }
+    private val isLoadingQuotes = MutableLiveData<Boolean>().apply { value = false }
 
     init {
         observeCurrencyRepo()
@@ -71,7 +82,7 @@ class CurrencyConverterViewModel(
     private fun observeCurrencyRepo() {
         currencyRepository.currencies.observeForever { entities ->
             val strings = entities.map { it.currency }
-            currenciesObservable.postValue(strings)
+            _currenciesObservable.postValue(strings)
             isLoadingCurrencies.postValue(false)
         }
     }
@@ -106,7 +117,7 @@ class CurrencyConverterViewModel(
     }
 
     private fun refreshIsLoading() {
-        isLoadingObservable.postValue(isLoadingQuotes.value!! || isLoadingCurrencies.value!!)
+        _isLoadingObservable.postValue(isLoadingQuotes.value!! || isLoadingCurrencies.value!!)
     }
 
     fun setSourceCurrency(currency: String) {
@@ -225,7 +236,7 @@ class CurrencyConverterViewModel(
 
     private fun setAdjustedQuotes(adjustedQuotes: List<QuoteEntity>) {
         isLoadingQuotes.postValue(false)
-        isEmptyObservable.postValue(adjustedQuotes.isEmpty())
-        quotesObservable.postValue(adjustedQuotes)
+        _isEmptyObservable.postValue(adjustedQuotes.isEmpty())
+        _quotesObservable.postValue(adjustedQuotes)
     }
 }
