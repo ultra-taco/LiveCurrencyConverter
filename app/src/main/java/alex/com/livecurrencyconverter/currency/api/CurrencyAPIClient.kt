@@ -10,11 +10,11 @@ import io.reactivex.Observable
 
 class CurrencyAPIClient(private val apiKey: String, private val currencyAPI: CurrencyAPI) {
 
-    fun getCurrencies(): Observable<CurrenciesAPIResponse> {
+    suspend fun getCurrencies(): CurrenciesAPIResponse {
         return currencyAPI.getCurrencies(apiKey)
     }
 
-    fun getQuotes(): Observable<QuotesAPIResponse> {
+    suspend fun getQuotes(): QuotesAPIResponse {
         return currencyAPI.getLiveQuotes(apiKey)
     }
 }

@@ -4,12 +4,8 @@ import alex.com.livecurrencyconverter.currency.api.CurrencyAPIClient
 import alex.com.livecurrencyconverter.currency.repository.currency.CurrencyRepository
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.subscribeBy
+import androidx.lifecycle.*
+import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -21,7 +17,7 @@ class CurrencyConverterViewModel(
     private val currencyAPIClient: CurrencyAPIClient,
     private val currencyRepository: CurrencyRepository,
     private val quoteRepository: QuoteRepository
-) : ViewModel() {
+) : ViewModel(), CoroutineScope by MainScope() {
 
     companion object {
         private const val DEFAULT_CURRENCY = "USD"    // API sets USD as the default currency
@@ -51,7 +47,6 @@ class CurrencyConverterViewModel(
     val showSnackbarEvent = MutableLiveData<String>()
 
     // Private data
-    private val disposables = CompositeDisposable()
     private var sourceCurrency: String = DEFAULT_CURRENCY
     private var destinationCurrency: String? = null
     private val isLoadingCurrencies = MutableLiveData<Boolean>().apply { value = false }
@@ -142,25 +137,24 @@ class CurrencyConverterViewModel(
         showSnackbarEvent.value = "Fetching currencies from server... "
 
         // Kick off request
-        val subscription = currencyAPIClient.getCurrencies()
-            .subscribeBy(
-                onNext = { response ->
-                    when {
-                        response.error != null -> throw IOException("Error fetching currencies: ${response.error.info}")
-                        response.currencies == null -> throw IOException("Error fetching currencies: Network response body malformed")
-                        response.currencies.isEmpty() -> throw IOException("Error fetching currencies: No data returned")
-                        else -> {
+        viewModelScope.async {
+            val response = currencyAPIClient.getCurrencies()
+            when {
+                response.error != null -> throw IOException("Error fetching currencies: ${response.error.info}")
+                response.currencies == null -> throw IOException("Error fetching currencies: Network response body malformed")
+                response.currencies.isEmpty() -> throw IOException("Error fetching currencies: No data returned")
+                else -> {
 
-                            // Save to repo
-                            currencyRepository.save(response.currencies)
-                        }
-                    }
-                },
-                onError = { throwable ->
-                    showErrorEvent.postValue(throwable.localizedMessage)
-                    isLoadingCurrencies.postValue(false)
-                })
-        disposables.add(subscription)
+                    // Save to repo
+                    currencyRepository.save(response.currencies)
+                }
+            }
+        }.invokeOnCompletion { throwable ->
+            isLoadingCurrencies.postValue(false)
+            throwable?.let {
+                showErrorEvent.postValue(throwable.localizedMessage)
+            }
+        }
     }
 
     private fun fetchQuotes() {
@@ -168,28 +162,22 @@ class CurrencyConverterViewModel(
         showSnackbarEvent.value = "Fetching quotes from server... "
 
         // Kick off request
-        val subscription = currencyAPIClient.getQuotes()
-            .subscribeBy(
-                onNext = { response ->
-                    when {
-                        response.error != null -> throw IOException("Error fetching quotes: ${response.error.info}")
-                        response.quotes == null -> throw IOException("Error fetching quotes: Network response body malformed")
-                        else -> {
-                            // Save to repo
-                            quoteRepository.save(response.quotes)
-                        }
-                    }
-                },
-                onError = { throwable ->
-                    showErrorEvent.postValue(throwable.localizedMessage)
-                    isLoadingQuotes.postValue(false)
-                })
-        disposables.add(subscription)
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        disposables.dispose()
+        viewModelScope.async {
+            val response = currencyAPIClient.getQuotes()
+            when {
+                response.error != null -> throw IOException("Error fetching quotes: ${response.error.info}")
+                response.quotes == null -> throw IOException("Error fetching quotes: Network response body malformed")
+                else -> {
+                    // Save to repo
+                    quoteRepository.save(response.quotes)
+                }
+            }
+        }.invokeOnCompletion { throwable ->
+            isLoadingQuotes.postValue(false)
+            throwable?.let {
+                showErrorEvent.postValue(throwable.localizedMessage)
+            }
+        }
     }
 
     /**

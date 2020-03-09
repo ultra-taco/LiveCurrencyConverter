@@ -13,8 +13,8 @@ import retrofit2.http.Query
 interface CurrencyAPI {
 
     @GET("list")
-    fun getCurrencies(@Query("access_key") apiKey: String): Observable<CurrenciesAPIResponse>
+    suspend fun getCurrencies(@Query("access_key") apiKey: String): CurrenciesAPIResponse
 
     @GET("live")
-    fun getLiveQuotes(@Query("access_key") apiKey: String): Observable<QuotesAPIResponse>
+    suspend fun getLiveQuotes(@Query("access_key") apiKey: String): QuotesAPIResponse
 }
