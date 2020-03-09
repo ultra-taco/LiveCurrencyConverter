@@ -6,6 +6,7 @@ import alex.com.livecurrencyconverter.currency.repository.quote.QuoteEntity
 import alex.com.livecurrencyconverter.currency.repository.quote.QuoteRepository
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import java.io.IOException
 import java.util.concurrent.TimeUnit
 
@@ -29,9 +30,9 @@ class CurrencyConverterViewModel(
     private val _currenciesObservable = MutableLiveData<List<String>>()
     val currenciesObservable: LiveData<List<String>>
         get() = _currenciesObservable
-    private val _quotesObservable = MutableLiveData<List<QuoteEntity>>()
-    val quotesObservable: LiveData<List<QuoteEntity>>
-        get() = _quotesObservable
+    private val _adjustedQuotesObservable = MutableLiveData<List<QuoteEntity>>()
+    val adjustedQuotesObservable: LiveData<List<QuoteEntity>>
+        get() = _adjustedQuotesObservable
     private val _isLoadingObservable = MutableLiveData<Boolean>()
     val isLoadingObservable: LiveData<Boolean>
         get() = _isLoadingObservable
@@ -51,6 +52,7 @@ class CurrencyConverterViewModel(
     private var destinationCurrency: String? = null
     private val isLoadingCurrencies = MutableLiveData<Boolean>().apply { value = false }
     private val isLoadingQuotes = MutableLiveData<Boolean>().apply { value = false }
+    private var quoteEntities: List<QuoteEntity>? = null
 
     init {
         observeCurrencyRepo()
@@ -76,10 +78,11 @@ class CurrencyConverterViewModel(
     }
 
     private fun observeCurrencyRepo() {
-        currencyRepository.currencies.observeForever { entities ->
-            val strings = entities.map { it.currency }
-            _currenciesObservable.postValue(strings)
-            isLoadingCurrencies.postValue(false)
+        viewModelScope.launch {
+            currencyRepository.getCurrencies().collect { entities ->
+                val strings = entities.map { it.currency }
+                _currenciesObservable.postValue(strings)
+            }
         }
     }
 
@@ -91,8 +94,11 @@ class CurrencyConverterViewModel(
     }
 
     private fun observeQuoteRepo() {
-        quoteRepository.quotes.observeForever {
-            createAdjustedQuotes()
+        viewModelScope.launch {
+            quoteRepository.getQuotes().collect { quotes ->
+                quoteEntities = quotes
+                createAdjustedQuotes()
+            }
         }
     }
 
@@ -127,9 +133,11 @@ class CurrencyConverterViewModel(
     }
 
     fun clearData() {
-        currencyRepository.clearData()
-        quoteRepository.clearData()
-        showSnackbarEvent.value = "DB & Prefs cleared. Pull to refresh to fetch data from server"
+        viewModelScope.launch {
+            currencyRepository.deleteCurrencies()
+            quoteRepository.deleteQuotes()
+            showSnackbarEvent.value = "DB & Prefs cleared. Pull to refresh to fetch data from server"
+        }
     }
 
     private fun fetchCurrencies() {
@@ -144,9 +152,8 @@ class CurrencyConverterViewModel(
                 response.currencies == null -> throw IOException("Error fetching currencies: Network response body malformed")
                 response.currencies.isEmpty() -> throw IOException("Error fetching currencies: No data returned")
                 else -> {
-
                     // Save to repo
-                    currencyRepository.save(response.currencies)
+                    currencyRepository.insertCurrencies(response.currencies)
                 }
             }
         }.invokeOnCompletion { throwable ->
@@ -169,7 +176,7 @@ class CurrencyConverterViewModel(
                 response.quotes == null -> throw IOException("Error fetching quotes: Network response body malformed")
                 else -> {
                     // Save to repo
-                    quoteRepository.save(response.quotes)
+                    quoteRepository.insertQuotes(response.quotes)
                 }
             }
         }.invokeOnCompletion { throwable ->
@@ -187,7 +194,7 @@ class CurrencyConverterViewModel(
     private fun createAdjustedQuotes() {
 
         // Assert repo is loaded
-        val quotes = quoteRepository.quotes.value
+        val quotes = quoteEntities
         if (quotes == null || quotes.isEmpty()) {
             println("Quotes DB empty")
             setAdjustedQuotes(emptyList())
@@ -197,8 +204,7 @@ class CurrencyConverterViewModel(
         // Find source conversion rate.
         var sourceConversionRate = 1.0
         if (sourceCurrency != DEFAULT_CURRENCY) {
-            sourceConversionRate =
-                quotes.find { it.currency == DEFAULT_CURRENCY + sourceCurrency }!!.value
+            sourceConversionRate = quotes.find { it.currency == DEFAULT_CURRENCY + sourceCurrency }!!.value
         }
 
         // Update quotes according to selected source currency
@@ -226,7 +232,7 @@ class CurrencyConverterViewModel(
     private fun setAdjustedQuotes(adjustedQuotes: List<QuoteEntity>) {
         isLoadingQuotes.postValue(false)
         _isEmptyObservable.postValue(adjustedQuotes.isEmpty())
-        _quotesObservable.postValue(adjustedQuotes)
+        _adjustedQuotesObservable.postValue(adjustedQuotes)
     }
 
     @Suppress("UNCHECKED_CAST")

@@ -2,7 +2,6 @@ package alex.com.livecurrencyconverter.currency.api
 
 import alex.com.livecurrencyconverter.currency.api.response.CurrenciesAPIResponse
 import alex.com.livecurrencyconverter.currency.api.response.QuotesAPIResponse
-import io.reactivex.Observable
 
 /**
  * Created by Alex Doub on 11/13/2019.

@@ -31,8 +31,10 @@ class CurrencyConverterActivity : AppCompatActivity() {
 
     @Inject
     lateinit var currencyAPIClient: CurrencyAPIClient
+
     @Inject
     lateinit var currencyRepository: CurrencyRepository
+
     @Inject
     lateinit var quoteRepository: QuoteRepository
 
@@ -144,7 +146,7 @@ class CurrencyConverterActivity : AppCompatActivity() {
         viewModel.isLoadingObservable.observe(this, Observer {
             binding.content.swipeRefreshLayout.isRefreshing = it
         })
-        viewModel.quotesObservable.observe(this, Observer { data ->
+        viewModel.adjustedQuotesObservable.observe(this, Observer { data ->
             quotesAdapter.setData(data)
         })
         viewModel.currenciesObservable.observe(this, Observer { currencyList ->
